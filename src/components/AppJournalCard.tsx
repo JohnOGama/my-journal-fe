@@ -3,10 +3,20 @@ import { Journal } from "@/features/journal/api";
 import { useGetUserJournals } from "@/features/journal/queries";
 import { dateFormatted } from "@/helper/dateFormat";
 import { Calendar } from "lucide-react";
+import { Skeleton } from "./ui/skeleton";
 
 export const AppJournalCardList = () => {
-  const { data } = useGetUserJournals();
+  const { data, isLoading } = useGetUserJournals();
 
+  if (isLoading) {
+    return (
+      <div className="space-y-4">
+        {[...Array(3)].map((_, i) => (
+          <AppJournalCardSkeleton key={i} />
+        ))}
+      </div>
+    );
+  }
   return (
     <div className="space-y-4">
       {data?.data?.items?.map((journal) => (
@@ -18,7 +28,7 @@ export const AppJournalCardList = () => {
 
 export const AppJournalCard = ({ journal }: { journal: Journal }) => {
   return (
-    <div className="w-full space-y-2 rounded-lg border border-input p-3">
+    <div className="w-full cursor-pointer bg-input  hover:border-primary duration-300 space-y-2 rounded-lg border border-input p-3">
       <h1 className="text-sm font-semibold line-clamp-1">{journal.title}</h1>
       <p className="text-sm text-muted-foreground line-clamp-3">
         {journal.content}
@@ -31,6 +41,26 @@ export const AppJournalCard = ({ journal }: { journal: Journal }) => {
         <div>
           <h1>Mood: {journal.mood}</h1>
         </div>
+      </div>
+    </div>
+  );
+};
+
+const AppJournalCardSkeleton = () => {
+  return (
+    <div className="w-full space-y-2 rounded-lg border border-input p-3">
+      <Skeleton className="h-4 w-3/4" />
+      <div className="space-y-1.5">
+        <Skeleton className="h-3 w-full" />
+        <Skeleton className="h-3 w-full" />
+        <Skeleton className="h-3 w-2/3" />
+      </div>
+      <div className="flex justify-between items-center">
+        <div className="flex gap-2 items-center">
+          <Skeleton className="h-4 w-4" />
+          <Skeleton className="h-3 w-20" />
+        </div>
+        <Skeleton className="h-3 w-16" />
       </div>
     </div>
   );

@@ -18,11 +18,21 @@ export interface Journal {
 }
 
 export const getUserJournalsAPI = (query?: getUserJournalQuery) => {
-  return api<{ items: Journal[] }>(
+  return api.get<{ items: Journal[] }>(
     `${baseURL}/journal/user?${
       query
         ? `&${new URLSearchParams(query as Record<string, string>).toString()}`
         : ""
     }`
   );
+};
+
+export interface createJournalBody {
+  title: string;
+  mood: string;
+  content: string;
+}
+
+export const createJournalAPI = (body: createJournalBody) => {
+  return api.post(`${baseURL}/journal`, body);
 };

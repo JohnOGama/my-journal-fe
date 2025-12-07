@@ -21,6 +21,8 @@ interface AppDrawerProps {
   submitText?: string;
   cancelText?: string;
   showFooter?: boolean;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }
 
 const AppDrawer: React.FC<AppDrawerProps> = ({
@@ -33,9 +35,11 @@ const AppDrawer: React.FC<AppDrawerProps> = ({
   submitText = "Submit",
   cancelText = "Cancel",
   showFooter = true,
+  open,
+  onOpenChange,
 }) => {
   return (
-    <Drawer>
+    <Drawer open={open} onOpenChange={onOpenChange}>
       <DrawerTrigger className="cursor-pointer" asChild>
         {trigger}
       </DrawerTrigger>
