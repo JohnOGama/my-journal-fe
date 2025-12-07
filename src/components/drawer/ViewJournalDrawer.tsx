@@ -124,7 +124,7 @@ const ViewJournalDrawer = ({
               {...register("title")}
               error={errors.title?.message}
               placeholder="Give your entry a title..."
-              className="text-lg font-semibold placeholder:font-normal placeholder:text-muted-foreground/50"
+              className="font-medium placeholder:font-normal"
             />
           </div>
 
