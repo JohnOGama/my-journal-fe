@@ -7,3 +7,6 @@ export * from "./spinner";
 export * from "./drawer";
 export * from "./button";
 export * from "./textarea";
+export * from "./sheet";
+export * from "./modal";
+export * from "./alert-dialog";

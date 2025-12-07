@@ -12,7 +12,7 @@ import {
 } from "./ui";
 
 interface AppDrawerProps {
-  trigger: React.ReactNode;
+  trigger?: React.ReactNode;
   title: string;
   description?: string;
   children?: React.ReactNode;
@@ -23,6 +23,7 @@ interface AppDrawerProps {
   showFooter?: boolean;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
+  contentClassName?: string;
 }
 
 const AppDrawer: React.FC<AppDrawerProps> = ({
@@ -37,13 +38,14 @@ const AppDrawer: React.FC<AppDrawerProps> = ({
   showFooter = true,
   open,
   onOpenChange,
+  contentClassName,
 }) => {
   return (
     <Drawer open={open} onOpenChange={onOpenChange}>
       <DrawerTrigger className="cursor-pointer" asChild>
         {trigger}
       </DrawerTrigger>
-      <DrawerContent>
+      <DrawerContent className={contentClassName}>
         <DrawerHeader>
           <DrawerTitle>{title}</DrawerTitle>
           {description && <DrawerDescription>{description}</DrawerDescription>}
