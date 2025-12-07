@@ -1,0 +1,63 @@
+import React from "react";
+import {
+  Button,
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "./ui";
+
+interface AppDrawerProps {
+  trigger: React.ReactNode;
+  title: string;
+  description?: string;
+  children?: React.ReactNode;
+  onSubmit?: () => void;
+  onCancel?: () => void;
+  submitText?: string;
+  cancelText?: string;
+  showFooter?: boolean;
+}
+
+const AppDrawer: React.FC<AppDrawerProps> = ({
+  trigger,
+  title,
+  description,
+  children,
+  onSubmit,
+  onCancel,
+  submitText = "Submit",
+  cancelText = "Cancel",
+  showFooter = true,
+}) => {
+  return (
+    <Drawer>
+      <DrawerTrigger className="cursor-pointer" asChild>
+        {trigger}
+      </DrawerTrigger>
+      <DrawerContent>
+        <DrawerHeader>
+          <DrawerTitle>{title}</DrawerTitle>
+          {description && <DrawerDescription>{description}</DrawerDescription>}
+        </DrawerHeader>
+        {children && <div className="px-4">{children}</div>}
+        {showFooter && (
+          <DrawerFooter>
+            {onSubmit && <Button onClick={onSubmit}>{submitText}</Button>}
+            <DrawerClose asChild>
+              <Button variant="outline" onClick={onCancel}>
+                {cancelText}
+              </Button>
+            </DrawerClose>
+          </DrawerFooter>
+        )}
+      </DrawerContent>
+    </Drawer>
+  );
+};
+
+export default AppDrawer;
