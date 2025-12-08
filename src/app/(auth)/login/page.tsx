@@ -23,17 +23,21 @@ const LoginPage = () => {
   } = form;
 
   const onSubmit = async (data: LoginSchemaT) => {
-    const { error } = await authClient.signIn.email({
-      email: data.email,
-      password: data.password,
-    });
+    try {
+      const { error } = await authClient.signIn.email({
+        email: data.email,
+        password: data.password,
+      });
 
-    if (error) {
-      console.error("Login failed:", error.message);
-      return;
+      if (error) {
+        console.error("Login failed:", error.message);
+        return;
+      }
+
+      router.push("/processing");
+    } catch (error) {
+      console.error("Login error:", error);
     }
-
-    router.push("/processing");
   };
 
   return (
