@@ -30,7 +30,7 @@ const LoginPage = () => {
       });
 
       if (error) {
-        console.error("Login failed:", error.message);
+        console.error("Login failed:", error);
         return;
       }
 
