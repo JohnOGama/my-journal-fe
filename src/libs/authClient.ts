@@ -5,4 +5,7 @@ const BACKEND_URL =
 
 export const authClient = createAuthClient({
   baseURL: BACKEND_URL,
+  fetchOptions: {
+    credentials: "include",
+  },
 });
