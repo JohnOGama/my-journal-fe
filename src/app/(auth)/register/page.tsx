@@ -7,6 +7,8 @@ import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui";
 import { Button } from "@/components/ui/button";
 import { registerSchema, RegisterSchemaT } from "./forms/register.schema";
+import { authClient } from "@/libs/authClient";
+import { authStorage } from "@/libs/authStorage";
 
 const RegisterPage = () => {
   const router = useRouter();
@@ -22,16 +24,41 @@ const RegisterPage = () => {
   } = form;
 
   const onSubmit = async (data: RegisterSchemaT) => {
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    router.push("/processing");
+    try {
+      const { error } = await authClient.signUp.email(
+        {
+          name: data.name,
+          email: data.email,
+          password: data.password,
+        },
+        {
+          onSuccess: (ctx) => {
+            // Get the bearer token from response headers and store in localStorage
+            const authToken = ctx.response.headers.get("set-auth-token");
+            if (authToken) {
+              authStorage.setToken(authToken);
+            }
+          },
+        }
+      );
+
+      if (error) {
+        console.error("Registration failed:", error);
+        return;
+      }
+
+      router.push("/processing");
+    } catch (error) {
+      console.error("Registration error:", error);
+    }
   };
 
   return (
     <div className="w-full h-full flex flex-col justify-center  space-y-4 max-w-sm mx-auto ">
       <div>
-        <h1 className="text-xl font-semibold">Sign in to your account</h1>
+        <h1 className="text-xl font-semibold">Create your account</h1>
         <p className="text-xs text-gray-400">
-          Enter your email and password to sign in
+          Enter your details to create an account
         </p>
       </div>
 
@@ -57,12 +84,12 @@ const RegisterPage = () => {
           disabled={isSubmitting || !isDirty || !isValid}
           className="w-full"
         >
-          Sign In with Email
+          Create Account
         </Button>
       </form>
 
       <p className="text-xs text-gray-400">
-        Don&apos;t have an account?{" "}
+        Already have an account?{" "}
         <Link href="/login" className="hover:underline ">
           Login
         </Link>
