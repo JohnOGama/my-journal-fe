@@ -1,7 +1,6 @@
 "use client";
 import AppProcessingPage from "@/components/AppProcessingPage";
 import { authClient } from "@/libs/authClient";
-import { authStorage } from "@/libs/authStorage";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect } from "react";
 
@@ -9,28 +8,17 @@ const ProcessingPage = () => {
   const router = useRouter();
 
   const getSession = useCallback(async () => {
-    // First check if we have a token in localStorage
-    const token = authStorage.getToken();
-
-    if (!token) {
-      router.push("/login");
-      return;
-    }
-
     try {
+      // Session cookie is automatically sent with the request
       const session = await authClient.getSession();
 
-      if (session?.error) {
-        authStorage.removeToken();
+      if (session?.error || !session?.data?.user) {
         router.push("/login");
         return;
       }
 
-      if (session?.data?.user) {
-        router.push("/");
-      }
+      router.push("/");
     } catch {
-      authStorage.removeToken();
       router.push("/login");
     }
   }, [router]);

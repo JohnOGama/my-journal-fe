@@ -4,7 +4,6 @@ import { useGetUserJournals } from "@/features/journal/queries";
 import { dateFormatted } from "@/helper/dateFormat";
 import { Calendar } from "lucide-react";
 import { Skeleton } from "./ui/skeleton";
-import AppDrawer from "./AppDrawer";
 import { useState } from "react";
 import ViewJournalDrawer from "./drawer/ViewJournalDrawer";
 

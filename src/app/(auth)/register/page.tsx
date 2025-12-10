@@ -8,7 +8,6 @@ import { Input } from "@/components/ui";
 import { Button } from "@/components/ui/button";
 import { registerSchema, RegisterSchemaT } from "./forms/register.schema";
 import { authClient } from "@/libs/authClient";
-import { authStorage } from "@/libs/authStorage";
 
 const RegisterPage = () => {
   const router = useRouter();
@@ -25,22 +24,12 @@ const RegisterPage = () => {
 
   const onSubmit = async (data: RegisterSchemaT) => {
     try {
-      const { error } = await authClient.signUp.email(
-        {
-          name: data.name,
-          email: data.email,
-          password: data.password,
-        },
-        {
-          onSuccess: (ctx) => {
-            // Get the bearer token from response headers and store in localStorage
-            const authToken = ctx.response.headers.get("set-auth-token");
-            if (authToken) {
-              authStorage.setToken(authToken);
-            }
-          },
-        }
-      );
+      // Cookie is automatically set by the server response
+      const { error } = await authClient.signUp.email({
+        name: data.name,
+        email: data.email,
+        password: data.password,
+      });
 
       if (error) {
         console.error("Registration failed:", error);

@@ -8,7 +8,6 @@ import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui";
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/libs/authClient";
-import { authStorage } from "@/libs/authStorage";
 
 const LoginPage = () => {
   const router = useRouter();
@@ -25,21 +24,11 @@ const LoginPage = () => {
 
   const onSubmit = async (data: LoginSchemaT) => {
     try {
-      const { error } = await authClient.signIn.email(
-        {
-          email: data.email,
-          password: data.password,
-        },
-        {
-          onSuccess: (ctx) => {
-            // Get the bearer token from response headers and store in localStorage
-            const authToken = ctx.response.headers.get("set-auth-token");
-            if (authToken) {
-              authStorage.setToken(authToken);
-            }
-          },
-        }
-      );
+      // Cookie is automatically set by the server response
+      const { error } = await authClient.signIn.email({
+        email: data.email,
+        password: data.password,
+      });
 
       if (error) {
         console.error("Login failed:", error);

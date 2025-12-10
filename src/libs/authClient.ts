@@ -1,21 +1,9 @@
 import { createAuthClient } from "better-auth/client";
-import { authStorage } from "./authStorage";
 
-const BACKEND_URL =
-  process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3001";
-
+// Use relative URL to go through Next.js proxy (same-origin for cookies)
 export const authClient = createAuthClient({
-  baseURL: BACKEND_URL,
+  baseURL: "",
   fetchOptions: {
-    auth: {
-      type: "Bearer",
-      token: () => authStorage.getToken() || "",
-    },
-    onResponse: (ctx) => {
-      // Check for 401 unauthorized responses and clear token
-      if (ctx.response.status === 401) {
-        authStorage.removeToken();
-      }
-    },
+    credentials: "include", // Include cookies in requests
   },
 });

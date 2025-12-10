@@ -1,1 +1,2 @@
-export const baseURL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3001/api/v1";
+// Use relative URL to go through Next.js proxy (same-origin for cookies)
+export const baseURL = "/api/v1";

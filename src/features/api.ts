@@ -1,5 +1,3 @@
-import { authStorage } from "@/libs/authStorage";
-
 interface ApiResponse<T> {
   response: number;
   success: string;
@@ -7,32 +5,19 @@ interface ApiResponse<T> {
   data: T;
 }
 
-function getAuthHeaders(): Record<string, string> {
-  const headers: Record<string, string> = {
-    "Content-Type": "application/json",
-  };
-
-  const token = authStorage.getToken();
-  if (token) {
-    headers["Authorization"] = `Bearer ${token}`;
-  }
-
-  return headers;
-}
+const defaultHeaders: Record<string, string> = {
+  "Content-Type": "application/json",
+};
 
 async function request<T>(
   url: string,
   options?: RequestInit
 ): Promise<ApiResponse<T>> {
   const res = await fetch(url, {
-    headers: getAuthHeaders(),
+    headers: defaultHeaders,
+    credentials: "include", // Include cookies in requests
     ...options,
   });
-
-  // Handle 401 unauthorized - clear token
-  if (res.status === 401) {
-    authStorage.removeToken();
-  }
 
   if (!res.ok) {
     throw await res.json();
