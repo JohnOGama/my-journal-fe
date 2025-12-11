@@ -6,9 +6,12 @@ import { Calendar } from "lucide-react";
 import { Skeleton } from "./ui/skeleton";
 import { useState } from "react";
 import ViewJournalDrawer from "./drawer/ViewJournalDrawer/ViewJournalDrawer";
+import { highlightText } from "@/helper/highlightText";
+import { useQueryState } from "nuqs";
 
 export const AppJournalCardList = () => {
   const { data, isLoading } = useGetUserJournals();
+
   if (isLoading) {
     return (
       <div className="space-y-4">
@@ -18,6 +21,15 @@ export const AppJournalCardList = () => {
       </div>
     );
   }
+
+  if (!data?.data) {
+    return (
+      <div className="h-full text-center flex justify-center items-center text-muted-foreground">
+        No journals found
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-4">
       {data?.data?.items?.map((journal) => (
@@ -28,6 +40,7 @@ export const AppJournalCardList = () => {
 };
 
 export const AppJournalCard = ({ journal }: { journal: Journal }) => {
+  const [query] = useQueryState("q", { defaultValue: "" });
   const [selectedJournalId, setSelectedJournalId] = useState<string | null>(
     null
   );
@@ -38,10 +51,18 @@ export const AppJournalCard = ({ journal }: { journal: Journal }) => {
         className="w-full cursor-pointer hover:bg-input/30  hover:border-primary duration-300 space-y-2 rounded-lg border border-input p-3"
         onClick={() => setSelectedJournalId(journal.uid)}
       >
-        <h1 className="text-sm font-semibold line-clamp-1">{journal.title}</h1>
-        <p className="text-sm text-muted-foreground line-clamp-3">
-          {journal.content}
-        </p>
+        <h1
+          dangerouslySetInnerHTML={{
+            __html: highlightText(journal.title, query),
+          }}
+          className="text-sm font-semibold line-clamp-1"
+        />
+        <p
+          dangerouslySetInnerHTML={{
+            __html: highlightText(journal.content, query),
+          }}
+          className="text-sm text-muted-foreground line-clamp-3"
+        />
         <div className="flex justify-between items-center text-muted-foreground text-xs">
           <div className="flex gap-2 items-center ">
             <Calendar size={16} />

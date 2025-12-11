@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { getJournalAPI, getUserJournalsAPI } from "./api";
 
-export const useGetUserJournals = () => {
+export const useGetUserJournals = (query?: { search?: string }) => {
   return useQuery({
-    queryKey: ["journals"],
-    queryFn: () => getUserJournalsAPI(),
+    queryKey: ["journals", query?.search],
+    queryFn: () => getUserJournalsAPI(query),
   });
 };
 
