@@ -1,11 +1,14 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import { authClient } from "./libs/authClient";
 
-export function proxy(request: NextRequest) {
-  const sessionToken = request.cookies.get("MJ-token.session_token");
-  const sessionData = request.cookies.get("MJ-token.session_data");
+export async function proxy(request: NextRequest) {
+  const sessionStatus = await authClient.getSession();
 
-  console.log("tokens", {
-    sessionToken,
-    sessionData,
-  });
+  console.log("essionStatus?.data?.user", sessionStatus?.data?.user);
+
+  if (!sessionStatus?.data?.user) {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
+
+  return NextResponse.next();
 }
