@@ -2,7 +2,6 @@ import React from "react";
 import {
   Button,
   Drawer,
-  DrawerClose,
   DrawerContent,
   DrawerDescription,
   DrawerFooter,
@@ -54,11 +53,11 @@ const AppDrawer: React.FC<AppDrawerProps> = ({
         {showFooter && (
           <DrawerFooter>
             {onSubmit && <Button onClick={onSubmit}>{submitText}</Button>}
-            <DrawerClose asChild>
+            {onCancel && (
               <Button variant="outline" onClick={onCancel}>
                 {cancelText}
               </Button>
-            </DrawerClose>
+            )}
           </DrawerFooter>
         )}
       </DrawerContent>

@@ -113,14 +113,12 @@ const ViewJournalDrawer = ({
       onCancel={handleCancel}
       submitText={isSubmitting || isUpdating ? "Saving..." : "Save Changes"}
       cancelText={"Cancel"}
+      contentClassName="overflow-y-auto"
     >
       {isLoading ? (
         <ViewJournalSkeleton />
       ) : isEditing ? (
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="space-y-5 overflow-y-auto"
-        >
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 ">
           {/* Title Field */}
           <div className="space-y-2">
             <Label
