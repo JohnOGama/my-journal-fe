@@ -1,3 +1,5 @@
+import { decode } from "@msgpack/msgpack";
+
 interface ApiResponse<T> {
   response: number;
   success: string;
@@ -5,9 +7,23 @@ interface ApiResponse<T> {
   data: T;
 }
 
+const MSGPACK_CONTENT_TYPE = "application/msgpack";
+
 const defaultHeaders: Record<string, string> = {
   "Content-Type": "application/json",
+  Accept: MSGPACK_CONTENT_TYPE,
 };
+
+async function parseResponse<T>(res: Response): Promise<ApiResponse<T>> {
+  const contentType = res.headers.get("content-type") || "";
+
+  if (contentType.includes(MSGPACK_CONTENT_TYPE)) {
+    const buffer = await res.arrayBuffer();
+    return decode(new Uint8Array(buffer)) as ApiResponse<T>;
+  }
+
+  return res.json();
+}
 
 async function request<T>(
   url: string,
@@ -24,10 +40,11 @@ async function request<T>(
   }
 
   if (!res.ok) {
-    throw await res.json();
+    const errorData = await parseResponse<T>(res);
+    throw errorData;
   }
 
-  return res.json();
+  return parseResponse<T>(res);
 }
 
 export const api = {
