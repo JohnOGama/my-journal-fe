@@ -5,6 +5,7 @@ import { signOut } from "@/helper/authHelpers";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { ROUTES } from "@/features/route";
 
 const Header = () => {
   const router = useRouter();
@@ -30,7 +31,7 @@ const Header = () => {
 
   const handleSignOut = async () => {
     await signOut();
-    router.push("/login");
+    router.push(ROUTES.LOGIN);
   };
 
   return (

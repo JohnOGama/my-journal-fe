@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui";
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/libs/authClient";
+import { ROUTES } from "@/features/route";
 
 const LoginPage = () => {
   const router = useRouter();
@@ -35,7 +36,7 @@ const LoginPage = () => {
         return;
       }
 
-      router.push("/processing");
+      router.push(ROUTES.PROCESSING);
     } catch (error) {
       console.error("Login error:", error);
     }

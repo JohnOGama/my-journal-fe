@@ -8,6 +8,7 @@ import { Input } from "@/components/ui";
 import { Button } from "@/components/ui/button";
 import { registerSchema, RegisterSchemaT } from "./forms/register.schema";
 import { authClient } from "@/libs/authClient";
+import { ROUTES } from "@/features/route";
 
 const RegisterPage = () => {
   const router = useRouter();
@@ -36,7 +37,7 @@ const RegisterPage = () => {
         return;
       }
 
-      router.push("/processing");
+      router.push(ROUTES.LOGIN);
     } catch (error) {
       console.error("Registration error:", error);
     }
