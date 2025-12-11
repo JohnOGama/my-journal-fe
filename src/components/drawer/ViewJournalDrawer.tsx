@@ -110,7 +110,7 @@ const ViewJournalDrawer = ({
       showFooter={false}
     >
       {isEditing ? (
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 overflow-y-auto">
           {/* Title Field */}
           <div className="space-y-2">
             <Label
