@@ -65,7 +65,7 @@ const ViewJournalDrawer = ({
     handleSubmit,
     register,
     reset,
-    formState: { errors, isSubmitting, isDirty, isValid },
+    formState: { errors, isSubmitting },
   } = form;
 
   // Reset form values when journal data loads or changes
@@ -108,7 +108,11 @@ const ViewJournalDrawer = ({
       title={isEditing ? "Edit Journal" : "View Journal"}
       open={selectedJournalId === journalUid}
       onOpenChange={handleOpenChange}
-      showFooter={false}
+      showFooter={isEditing}
+      onSubmit={handleSubmit(onSubmit)}
+      onCancel={handleCancel}
+      submitText={isSubmitting || isUpdating ? "Saving..." : "Save Changes"}
+      cancelText={"Cancel"}
     >
       {isLoading ? (
         <ViewJournalSkeleton />
@@ -167,26 +171,6 @@ const ViewJournalDrawer = ({
               className="h-[180px] leading-relaxed placeholder:text-muted-foreground/50"
             />
           </div>
-
-          {/* Action Buttons */}
-          <div className="flex gap-3 pt-2">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={handleCancel}
-              className="flex-1"
-            >
-              Cancel
-            </Button>
-            <Button
-              loading={isSubmitting || isUpdating}
-              disabled={!isValid || !isDirty}
-              type="submit"
-              className="flex-1"
-            >
-              {isSubmitting || isUpdating ? "Saving..." : "Save Changes"}
-            </Button>
-          </div>
         </form>
       ) : (
         <div className="space-y-6">
@@ -198,6 +182,15 @@ const ViewJournalDrawer = ({
                 {journal.mood}
               </span>
             )}
+            <Button
+              variant="outline"
+              size="default"
+              onClick={() => setIsEditing(true)}
+              className="flex-1"
+            >
+              <Pencil size={14} />
+              Edit
+            </Button>
             <DeleteJournalDialog journalUid={journalUid} />
           </div>
 
@@ -230,18 +223,6 @@ const ViewJournalDrawer = ({
               {journal?.content}
             </p>
           </article>
-
-          <div className="flex gap-3 pt-2">
-            <Button
-              variant="outline"
-              size="default"
-              onClick={() => setIsEditing(true)}
-              className="flex-1"
-            >
-              <Pencil size={14} />
-              Edit
-            </Button>
-          </div>
         </div>
       )}
     </AppDrawer>
