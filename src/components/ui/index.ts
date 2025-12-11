@@ -10,3 +10,4 @@ export * from "./textarea";
 export * from "./sheet";
 export * from "./modal";
 export * from "./alert-dialog";
+export * from "./select";

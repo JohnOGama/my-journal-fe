@@ -25,3 +25,21 @@ export const APP_NAVIGATION_ITEMS = [
     icon: CircleUser,
   },
 ];
+
+export const MOOD_OPTIONS = [
+  { label: "😊 Happy", value: "happy" },
+  { label: "🤩 Excited", value: "excited" },
+  { label: "😌 Content", value: "content" },
+  { label: "🥹 Proud", value: "proud" },
+  { label: "🥰 Loving", value: "loving" },
+  { label: "🌟 Hopeful", value: "hopeful" },
+  { label: "😢 Sad", value: "sad" },
+  { label: "😠 Angry", value: "angry" },
+  { label: "😰 Anxious", value: "anxious" },
+  { label: "😔 Guilty", value: "guilty" },
+  { label: "😨 Fearful", value: "fearful" },
+  { label: "😒 Jealous", value: "jealous" },
+  { label: "😕 Confused", value: "confused" },
+  { label: "😲 Surprised", value: "surprised" },
+  { label: "😑 Bored", value: "bored" },
+];

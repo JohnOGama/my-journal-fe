@@ -6,6 +6,8 @@ import { Button, Input, Textarea } from "../ui";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useCreateJournal } from "@/features/journal/mutations";
+import AppSelect from "../AppSelect";
+import { MOOD_OPTIONS } from "@/common/constants";
 
 const createJournalForm = z.object({
   title: z.string().min(1, { message: "Title is required" }),
@@ -65,10 +67,14 @@ const CreateJournalDrawer = () => {
           placeholder="Journal Title"
           className="font-medium placeholder:font-normal"
         />
-        <Input
-          {...register("mood")}
-          error={errors.mood?.message}
-          placeholder="Mood"
+        <AppSelect
+          triggerPlaceholder="Select a mood"
+          options={MOOD_OPTIONS}
+          onValueChange={(value) => {
+            form.setValue("mood", value);
+          }}
+          className="w-full"
+          contentClassName="h-[200px]"
         />
         <Textarea
           {...register("content")}
