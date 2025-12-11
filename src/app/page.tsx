@@ -1,6 +1,7 @@
 import { AppJournalCardList } from "@/components/AppJournalCard";
 import CreateJournalDrawer from "@/components/drawer/CreateJournalDrawer";
 import Header from "@/components/homepage/Header";
+import JournalCardSkeleton from "@/components/skeleton/JournalCardSkeleton";
 import { Suspense } from "react";
 
 export default function Home() {
@@ -8,7 +9,7 @@ export default function Home() {
     <div className="space-y-4">
       <Header />
       <CreateJournalDrawer />
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<JournalCardSkeleton />}>
         <AppJournalCardList />
       </Suspense>
     </div>
