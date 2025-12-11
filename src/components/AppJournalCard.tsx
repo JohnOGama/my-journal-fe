@@ -10,7 +10,8 @@ import { highlightText } from "@/helper/highlightText";
 import { useQueryState } from "nuqs";
 
 export const AppJournalCardList = () => {
-  const { data, isLoading } = useGetUserJournals();
+  const [query] = useQueryState("q", { defaultValue: "" });
+  const { data, isLoading } = useGetUserJournals({ search: query });
 
   if (isLoading) {
     return (

@@ -1,3 +1,4 @@
+"use client";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 const NuqsAdapterProvider = ({ children }: { children: React.ReactNode }) => {
