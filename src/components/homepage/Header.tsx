@@ -1,7 +1,7 @@
 "use client";
 
 import { authClient } from "@/libs/authClient";
-import { signOut } from "@/libs/authHelpers";
+import { signOut } from "@/helper/authHelpers";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";

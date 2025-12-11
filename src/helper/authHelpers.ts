@@ -1,4 +1,4 @@
-import { authClient } from "./authClient";
+import { authClient } from "../libs/authClient";
 
 /**
  * Sign out the user - clears the session cookie via the auth client
@@ -17,9 +17,8 @@ export const signOut = async (): Promise<void> => {
 export const checkAuth = async (): Promise<boolean> => {
   try {
     const session = await authClient.getSession();
-    return !!(session?.data?.user);
+    return !!session?.data?.user;
   } catch {
     return false;
   }
 };
-

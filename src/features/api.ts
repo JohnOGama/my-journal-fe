@@ -15,9 +15,13 @@ async function request<T>(
 ): Promise<ApiResponse<T>> {
   const res = await fetch(url, {
     headers: defaultHeaders,
-    credentials: "include", // Include cookies in requests
+    credentials: "include",
     ...options,
   });
+
+  if (!res.ok && res.status === 401 && typeof window !== "undefined") {
+    window.location.href = "/login";
+  }
 
   if (!res.ok) {
     throw await res.json();
