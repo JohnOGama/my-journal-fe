@@ -1,6 +1,8 @@
 import { Input, Label, Textarea } from "@/components/ui";
 import { useFormContext } from "react-hook-form";
 import { EditJournalSchemaT } from "./ViewJournalDrawer";
+import AppSelect from "@/components/AppSelect";
+import { MOOD_OPTIONS } from "@/common/constants";
 
 const EditForm = () => {
   const form = useFormContext<EditJournalSchemaT>();
@@ -36,12 +38,14 @@ const EditForm = () => {
         >
           Mood
         </Label>
-        <Input
-          id="mood"
-          {...register("mood")}
-          error={errors.mood?.message}
-          placeholder="How are you feeling?"
-          className="placeholder:text-muted-foreground/50"
+        <AppSelect
+          triggerPlaceholder="Select a mood"
+          options={MOOD_OPTIONS}
+          onValueChange={(value) => {
+            form.setValue("mood", value);
+          }}
+          className="w-full"
+          contentClassName="h-[200px]"
         />
       </div>
 
