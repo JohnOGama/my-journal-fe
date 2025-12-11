@@ -5,7 +5,7 @@ import { dateFormatted } from "@/helper/dateFormat";
 import { Calendar } from "lucide-react";
 import { Skeleton } from "./ui/skeleton";
 import { useState } from "react";
-import ViewJournalDrawer from "./drawer/ViewJournalDrawer";
+import ViewJournalDrawer from "./drawer/ViewJournalDrawer/ViewJournalDrawer";
 
 export const AppJournalCardList = () => {
   const { data, isLoading } = useGetUserJournals();
@@ -54,9 +54,9 @@ export const AppJournalCard = ({ journal }: { journal: Journal }) => {
       </div>
 
       <ViewJournalDrawer
+        open={selectedJournalId === journal.uid}
         selectedJournalId={selectedJournalId}
-        journalUid={journal.uid}
-        setSelectedJournalId={setSelectedJournalId}
+        onClose={() => setSelectedJournalId(null)}
       />
     </>
   );

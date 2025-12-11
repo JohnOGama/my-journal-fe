@@ -49,7 +49,7 @@ const AppDrawer: React.FC<AppDrawerProps> = ({
           <DrawerTitle>{title}</DrawerTitle>
           {description && <DrawerDescription>{description}</DrawerDescription>}
         </DrawerHeader>
-        {children && <div className="px-4">{children}</div>}
+        {children && <div className="px-4 overflow-y-auto">{children}</div>}
         {showFooter && (
           <DrawerFooter>
             {onSubmit && <Button onClick={onSubmit}>{submitText}</Button>}
