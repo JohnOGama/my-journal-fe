@@ -23,6 +23,7 @@ import {
   AlertDialogAction,
 } from "../ui";
 import { Calendar, Pencil, Sparkles, Trash } from "lucide-react";
+import { Skeleton } from "../ui/skeleton";
 import { dateFormatted } from "@/helper/dateFormat";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -45,7 +46,7 @@ const ViewJournalDrawer = ({
   setSelectedJournalId: (journalId: string | null) => void;
 }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const { data } = useGetJournal(selectedJournalId!);
+  const { data, isLoading } = useGetJournal(selectedJournalId!);
   const { updateJournalAsync, isUpdating } = useUpdateJournal();
 
   const journal = data?.data;
@@ -109,8 +110,13 @@ const ViewJournalDrawer = ({
       onOpenChange={handleOpenChange}
       showFooter={false}
     >
-      {isEditing ? (
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 overflow-y-auto">
+      {isLoading ? (
+        <ViewJournalSkeleton />
+      ) : isEditing ? (
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="space-y-5 overflow-y-auto"
+        >
           {/* Title Field */}
           <div className="space-y-2">
             <Label
@@ -243,6 +249,45 @@ const ViewJournalDrawer = ({
 };
 
 export default ViewJournalDrawer;
+
+function ViewJournalSkeleton() {
+  return (
+    <div className="space-y-6">
+      {/* Header: Mood Badge & Delete Button */}
+      <div className="flex items-center justify-between">
+        <Skeleton className="h-7 w-24 rounded-full" />
+        <Skeleton className="h-8 w-20" />
+      </div>
+
+      {/* Title */}
+      <div className="space-y-2">
+        <Skeleton className="h-8 w-3/4" />
+        {/* Date */}
+        <div className="flex items-center gap-1.5">
+          <Skeleton className="h-4 w-4 rounded" />
+          <Skeleton className="h-4 w-32" />
+        </div>
+      </div>
+
+      {/* Divider */}
+      <div className="h-px bg-linear-to-r from-border via-border/50 to-transparent" />
+
+      {/* Content */}
+      <div className="space-y-3">
+        <Skeleton className="h-4 w-full" />
+        <Skeleton className="h-4 w-full" />
+        <Skeleton className="h-4 w-5/6" />
+        <Skeleton className="h-4 w-full" />
+        <Skeleton className="h-4 w-3/4" />
+      </div>
+
+      {/* Button */}
+      <div className="flex gap-3 pt-2">
+        <Skeleton className="h-10 flex-1" />
+      </div>
+    </div>
+  );
+}
 
 function DeleteJournalDialog({ journalUid }: { journalUid: string }) {
   const { deleteJournalAsync, isDeleting } = useDeleteJournal();
