@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { cn } from "@/libs/shadcn";
 import { SparkleIcon } from "../icons/svg";
 import { useQueryState } from "nuqs";
+import { useGetUserJournals } from "@/features/journal/queries";
 
 const PLACEHOLDER_TEXTS = [
   "What happened today?",
@@ -30,9 +31,11 @@ const SearchJournal = ({
   const isDeletingRef = useRef(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const [, setQuery] = useQueryState("q", {
+  const [query, setQuery] = useQueryState("q", {
     defaultValue: "",
   });
+
+  const { data: journals } = useGetUserJournals({ search: query });
 
   const handleSearch = useCallback(() => {
     setQuery(searchValue);

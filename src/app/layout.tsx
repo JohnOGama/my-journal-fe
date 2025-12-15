@@ -26,13 +26,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable}  antialiased min-h-full flex flex-col`}
+        className={`${geistSans.variable} ${geistMono.variable} flex min-h-full flex-col antialiased`}
       >
         <Providers>
           <AppHeader />
-          <main className="w-full h-full lg:max-w-7xl lg:mx-auto flex flex-col flex-1 p-4 lg:px-0 lg:py-4 gap-4">
+          <main className="flex h-full w-full flex-1 flex-col gap-4 p-4 lg:mx-auto lg:max-w-7xl lg:px-0 lg:py-4">
             {children}
           </main>
           <AppNavigation />

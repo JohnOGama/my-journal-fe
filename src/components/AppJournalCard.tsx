@@ -2,7 +2,7 @@
 import { Journal } from "@/features/journal/api";
 import { useGetUserJournals } from "@/features/journal/queries";
 import { dateFormatted } from "@/helper/dateFormat";
-import { Calendar, AlertCircle, Zap, Clock } from "lucide-react";
+import { Calendar, AlertCircle, Zap, Clock, BookOpen } from "lucide-react";
 import { useState } from "react";
 import ViewJournalDrawer from "./drawer/ViewJournalDrawer/ViewJournalDrawer";
 import { highlightText } from "@/helper/highlightText";
@@ -83,9 +83,26 @@ export const AppJournalCardList = () => {
   }
 
   if (!data?.data) {
+    const hasSearchQuery = query && query.trim().length > 0;
+
     return (
-      <div className="text-muted-foreground flex h-full items-center justify-center text-center">
-        No journals found
+      <div className="flex h-full min-h-[400px] items-center justify-center p-6">
+        <div className="bg-background flex w-full max-w-md flex-col items-center gap-4 rounded-lg p-6 text-center shadow-lg">
+          <div className="bg-muted/50 text-muted-foreground dark:bg-muted/30 flex size-16 items-center justify-center rounded-full">
+            <BookOpen className="size-8" strokeWidth={2} />
+          </div>
+
+          <div className="space-y-2">
+            <h3 className="text-lg font-semibold">
+              {hasSearchQuery ? "No journals found" : "No journals yet"}
+            </h3>
+            <p className="text-muted-foreground text-sm leading-relaxed">
+              {hasSearchQuery
+                ? `We couldn't find any journals matching "${query}". Try adjusting your search terms.`
+                : "Start your journaling journey by creating your first entry. Your thoughts and memories are waiting to be captured."}
+            </p>
+          </div>
+        </div>
       </div>
     );
   }
