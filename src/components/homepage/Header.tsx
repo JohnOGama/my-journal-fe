@@ -6,12 +6,15 @@ import { Button } from "@/components/ui/button";
 import { ROUTES } from "@/features/route";
 import { useGetUserData } from "@/features/user/queries";
 import CreateJournalDrawer from "../drawer/CreateJournalDrawer";
+import { useState } from "react";
 
 const Header = () => {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const { data, isLoading } = useGetUserData();
 
   const handleSignOut = async () => {
+    setLoading(true);
     await signOut();
     router.push(ROUTES.LOGIN);
   };
@@ -26,7 +29,7 @@ const Header = () => {
             </h1>
             <p className="text-sm">Welcome back to your journal</p>
           </div>
-          <Button variant="ghost" onClick={handleSignOut}>
+          <Button loading={loading} variant="ghost" onClick={handleSignOut}>
             Sign Out
           </Button>
         </div>
