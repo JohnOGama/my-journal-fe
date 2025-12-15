@@ -26,7 +26,7 @@ export const AppJournalCardList = () => {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 w-full">
       {data?.data?.items?.map((journal) => (
         <AppJournalCard key={journal.uid} journal={journal} />
       ))}

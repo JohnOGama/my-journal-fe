@@ -2,7 +2,7 @@ import { Skeleton } from "../ui";
 
 const JournalCardSkeleton = () => {
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 w-full">
       {[...Array(3)].map((_, i) => (
         <AppJournalCardSkeleton key={i} />
       ))}

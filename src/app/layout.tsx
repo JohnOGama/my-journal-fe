@@ -32,7 +32,7 @@ export default function RootLayout({
       >
         <Providers>
           <AppHeader />
-          <main className="w-full h-full lg:max-w-6xl lg:mx-auto flex flex-col flex-1 p-4 lg:p-0">
+          <main className="w-full h-full lg:max-w-7xl lg:mx-auto flex flex-col flex-1 p-4 lg:px-0 lg:py-4 gap-4">
             {children}
           </main>
           <AppNavigation />

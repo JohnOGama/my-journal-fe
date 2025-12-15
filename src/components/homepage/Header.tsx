@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { ROUTES } from "@/features/route";
 import { useGetUserData } from "@/features/user/queries";
+import CreateJournalDrawer from "../drawer/CreateJournalDrawer";
 
 const Header = () => {
   const router = useRouter();
@@ -16,16 +17,19 @@ const Header = () => {
   };
 
   return (
-    <div className="flex items-center justify-between">
-      <div>
-        <h1 className="text-lg font-semibold">
-          {isLoading ? "Loading..." : `Hi ${data?.name}`}
-        </h1>
-        <p className="text-sm">Welcome back to your journal</p>
+    <div className="space-y-4 w-full lg:w-[500px] border border-border lg:h-fit rounded-lg p-3">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-lg font-semibold">
+            {isLoading ? "Loading..." : `Hi ${data?.name}`}
+          </h1>
+          <p className="text-sm">Welcome back to your journal</p>
+        </div>
+        <Button variant="ghost" onClick={handleSignOut}>
+          Sign Out
+        </Button>
       </div>
-      <Button variant="ghost" onClick={handleSignOut}>
-        Sign Out
-      </Button>
+      <CreateJournalDrawer />
     </div>
   );
 };
