@@ -17,7 +17,7 @@ const Header = () => {
   };
 
   return (
-    <div className="w-full space-y-3 lg:w-[700px]">
+    <div className="w-full space-y-3 lg:w-[600px]">
       <div className="border-border w-full space-y-4 rounded-lg border p-3 lg:h-fit">
         <div className="flex items-center justify-between">
           <div>
@@ -32,7 +32,7 @@ const Header = () => {
         </div>
         <CreateJournalDrawer />
       </div>
-      <div className="hidden space-y-1 lg:block">
+      <div className="hidden lg:block lg:space-y-1">
         <p className="text-muted-foreground/60 w-fit cursor-pointer text-xs hover:underline">
           Release Notes
         </p>

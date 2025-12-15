@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { cn } from "@/libs/shadcn";
 import { SparkleIcon } from "../icons/svg";
+import { useQueryState } from "nuqs";
 
 const PLACEHOLDER_TEXTS = [
   "What happened today?",
@@ -16,7 +17,11 @@ const TYPING_SPEED = 80;
 const DELETING_SPEED = 40;
 const PAUSE_DURATION = 2000;
 
-const SearchJournal = () => {
+const SearchJournal = ({
+  containerClassName,
+}: {
+  containerClassName?: string;
+}) => {
   const [placeholder, setPlaceholder] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const [searchValue, setSearchValue] = useState("");
@@ -24,6 +29,16 @@ const SearchJournal = () => {
   const charIndexRef = useRef(0);
   const isDeletingRef = useRef(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const [, setQuery] = useQueryState("q", {
+    defaultValue: "",
+  });
+
+  const handleSearch = useCallback(() => {
+    setQuery(searchValue);
+    setSearchValue("");
+    setIsFocused(false);
+  }, [searchValue, setQuery, setSearchValue, setIsFocused]);
 
   useEffect(() => {
     const animate = () => {
@@ -64,7 +79,12 @@ const SearchJournal = () => {
   }, []);
 
   return (
-    <div className="border-border w-full rounded-xl border p-4">
+    <div
+      className={cn(
+        "border-border w-full rounded-xl border p-4",
+        containerClassName,
+      )}
+    >
       {/* AI Badge */}
       <div className="mb-2 flex items-center gap-1.5">
         <SparkleIcon className="h-3.5 w-3.5 animate-pulse" />
@@ -113,6 +133,11 @@ const SearchJournal = () => {
             onChange={(e) => setSearchValue(e.target.value)}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleSearch();
+              }
+            }}
             placeholder={placeholder || ""}
             className={cn(
               "text-foreground placeholder:text-muted-foreground/70 flex-1 bg-transparent text-sm outline-none",
@@ -137,7 +162,10 @@ const SearchJournal = () => {
           {/* Clear Button */}
           {searchValue && (
             <button
-              onClick={() => setSearchValue("")}
+              onClick={() => {
+                setSearchValue("");
+                setQuery("");
+              }}
               className="bg-muted hover:bg-muted-foreground/20 flex h-5 w-5 shrink-0 items-center justify-center rounded-full transition-colors"
             >
               <svg
@@ -160,7 +188,8 @@ const SearchJournal = () => {
 
       {/* Helper Text */}
       <p className="text-muted-foreground/60 mt-2 pl-1 text-xs">
-        Ask anything about your journal entries using natural language
+        Ask anything about your journal entries using natural language (5
+        searches per day)
       </p>
     </div>
   );

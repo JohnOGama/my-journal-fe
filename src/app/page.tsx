@@ -11,7 +11,7 @@ export default function Home() {
       <Header />
 
       <div className="flex w-full flex-col gap-5">
-        <SearchJournal />
+        <SearchJournal containerClassName="hidden lg:block" />
         <Suspense fallback={<JournalCardSkeleton />}>
           <AppJournalCardList />
         </Suspense>

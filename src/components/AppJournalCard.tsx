@@ -2,7 +2,7 @@
 import { Journal } from "@/features/journal/api";
 import { useGetUserJournals } from "@/features/journal/queries";
 import { dateFormatted } from "@/helper/dateFormat";
-import { Calendar } from "lucide-react";
+import { Calendar, AlertCircle, Zap, Clock } from "lucide-react";
 import { useState } from "react";
 import ViewJournalDrawer from "./drawer/ViewJournalDrawer/ViewJournalDrawer";
 import { highlightText } from "@/helper/highlightText";
@@ -10,23 +10,88 @@ import { useQueryState } from "nuqs";
 import JournalCardSkeleton from "./skeleton/JournalCardSkeleton";
 
 export const AppJournalCardList = () => {
-  const [query] = useQueryState("q", { defaultValue: "" });
-  const { data, isLoading } = useGetUserJournals({ search: query });
+  const [query, setQuery] = useQueryState("q", { defaultValue: "" });
+  const { data, isLoading, error } = useGetUserJournals({ search: query });
 
   if (isLoading) {
     return <JournalCardSkeleton />;
   }
 
+  if (error) {
+    // Type guard for error with statusCode
+    interface ErrorWithStatusCode extends Error {
+      statusCode?: number;
+      response?: { status?: number };
+    }
+
+    const errorWithStatus = error as ErrorWithStatusCode;
+    const statusCode =
+      errorWithStatus?.statusCode || errorWithStatus?.response?.status;
+    const isUsageLimitError = statusCode === 403;
+    const errorMessage = errorWithStatus?.message || "An error occurred";
+
+    return (
+      <div className="flex h-full min-h-[400px] items-center justify-center p-6">
+        <div className="bg-background flex w-full max-w-md flex-col items-center gap-4 rounded-lg p-6 text-center shadow-lg">
+          <div
+            className={`flex size-16 items-center justify-center rounded-full ${
+              isUsageLimitError
+                ? "bg-primary/10 text-primary dark:bg-primary/20"
+                : "bg-destructive/10 text-destructive dark:bg-destructive/20"
+            }`}
+          >
+            {isUsageLimitError ? (
+              <Zap className="size-8" strokeWidth={2} />
+            ) : (
+              <AlertCircle className="size-8" strokeWidth={2} />
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <h3
+              className={`text-lg font-semibold ${
+                isUsageLimitError
+                  ? "text-primary-600 dark:text-primary-400"
+                  : "text-destructive"
+              }`}
+            >
+              {isUsageLimitError
+                ? "Search Limit Reached"
+                : "Something went wrong"}
+            </h3>
+            <p className="text-muted-foreground text-sm leading-relaxed whitespace-pre-wrap">
+              {errorMessage}
+            </p>
+          </div>
+
+          {isUsageLimitError && (
+            <div
+              onClick={() => setQuery("")}
+              className="bg-muted/50 flex cursor-pointer items-center gap-2 rounded-md px-4 py-2 text-sm"
+            >
+              <Clock className="text-muted-foreground size-4" />
+              <span className="text-muted-foreground">
+                Please try again later
+              </span>
+            </div>
+          )}
+
+          <div className="bg-muted/30 mt-2 h-px w-full" />
+        </div>
+      </div>
+    );
+  }
+
   if (!data?.data) {
     return (
-      <div className="h-full text-center flex justify-center items-center text-muted-foreground">
+      <div className="text-muted-foreground flex h-full items-center justify-center text-center">
         No journals found
       </div>
     );
   }
 
   return (
-    <div className="space-y-4 w-full">
+    <div className="w-full space-y-4">
       {data?.data?.items?.map((journal) => (
         <AppJournalCard key={journal.uid} journal={journal} />
       ))}
@@ -37,29 +102,29 @@ export const AppJournalCardList = () => {
 export const AppJournalCard = ({ journal }: { journal: Journal }) => {
   const [query] = useQueryState("q", { defaultValue: "" });
   const [selectedJournalId, setSelectedJournalId] = useState<string | null>(
-    null
+    null,
   );
 
   return (
     <>
       <div
-        className="w-full cursor-pointer hover:bg-input/30  hover:border-primary duration-300 space-y-2 rounded-lg border border-input p-3"
+        className="hover:bg-input/30 hover:border-primary border-input w-full cursor-pointer space-y-2 rounded-lg border p-3 duration-300"
         onClick={() => setSelectedJournalId(journal.uid)}
       >
         <h1
           dangerouslySetInnerHTML={{
             __html: highlightText(journal.title, query),
           }}
-          className="text-sm font-semibold line-clamp-1"
+          className="line-clamp-1 text-sm font-semibold"
         />
         <p
           dangerouslySetInnerHTML={{
             __html: highlightText(journal.content, query),
           }}
-          className="text-sm text-muted-foreground line-clamp-3"
+          className="text-muted-foreground line-clamp-3 text-sm"
         />
-        <div className="flex justify-between items-center text-muted-foreground text-xs">
-          <div className="flex gap-2 items-center ">
+        <div className="text-muted-foreground flex items-center justify-between text-xs">
+          <div className="flex items-center gap-2">
             <Calendar size={16} />
             <p>{dateFormatted(journal.createdAt)}</p>
           </div>

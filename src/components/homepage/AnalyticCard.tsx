@@ -7,7 +7,7 @@ const AnalyticCard = ({ className }: { className?: string }) => {
   return (
     <div
       className={cn(
-        "border-border w-full space-y-4 rounded-lg border p-3 lg:block lg:h-fit lg:w-[500px]",
+        "border-border w-full space-y-4 rounded-lg border p-3 lg:block lg:h-fit lg:w-[600px]",
         className,
       )}
     >
