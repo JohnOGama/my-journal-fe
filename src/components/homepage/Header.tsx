@@ -17,19 +17,29 @@ const Header = () => {
   };
 
   return (
-    <div className="space-y-4 w-full lg:w-[500px] border border-border lg:h-fit rounded-lg p-3">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-lg font-semibold">
-            {isLoading ? "Loading..." : `Hi ${data?.name}`}
-          </h1>
-          <p className="text-sm">Welcome back to your journal</p>
+    <div className="w-full space-y-3 lg:w-[700px]">
+      <div className="border-border w-full space-y-4 rounded-lg border p-3 lg:h-fit">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-lg font-semibold">
+              {isLoading ? "Loading..." : `Hi ${data?.name}`}
+            </h1>
+            <p className="text-sm">Welcome back to your journal</p>
+          </div>
+          <Button variant="ghost" onClick={handleSignOut}>
+            Sign Out
+          </Button>
         </div>
-        <Button variant="ghost" onClick={handleSignOut}>
-          Sign Out
-        </Button>
+        <CreateJournalDrawer />
       </div>
-      <CreateJournalDrawer />
+      <div className="hidden space-y-1 lg:block">
+        <p className="text-muted-foreground/60 w-fit cursor-pointer text-xs hover:underline">
+          Release Notes
+        </p>
+        <p className="text-muted-foreground/60 w-fit cursor-pointer text-xs hover:underline">
+          Contact Developer
+        </p>
+      </div>
     </div>
   );
 };

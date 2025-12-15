@@ -1,0 +1,169 @@
+"use client";
+
+import { useState, useEffect, useRef } from "react";
+import { cn } from "@/libs/shadcn";
+import { SparkleIcon } from "../icons/svg";
+
+const PLACEHOLDER_TEXTS = [
+  "What happened today?",
+  "Best journal entry I've written",
+  "A favorite memory",
+  "Goals for this week",
+  "Moments I'm grateful for",
+];
+
+const TYPING_SPEED = 80;
+const DELETING_SPEED = 40;
+const PAUSE_DURATION = 2000;
+
+const SearchJournal = () => {
+  const [placeholder, setPlaceholder] = useState("");
+  const [isFocused, setIsFocused] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
+  const textIndexRef = useRef(0);
+  const charIndexRef = useRef(0);
+  const isDeletingRef = useRef(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    const animate = () => {
+      const currentText = PLACEHOLDER_TEXTS[textIndexRef.current];
+
+      if (!isDeletingRef.current) {
+        if (charIndexRef.current < currentText.length) {
+          charIndexRef.current += 1;
+          setPlaceholder(currentText.slice(0, charIndexRef.current));
+          timeoutRef.current = setTimeout(animate, TYPING_SPEED);
+        } else {
+          timeoutRef.current = setTimeout(() => {
+            isDeletingRef.current = true;
+            animate();
+          }, PAUSE_DURATION);
+        }
+      } else {
+        if (charIndexRef.current > 0) {
+          charIndexRef.current -= 1;
+          setPlaceholder(currentText.slice(0, charIndexRef.current));
+          timeoutRef.current = setTimeout(animate, DELETING_SPEED);
+        } else {
+          isDeletingRef.current = false;
+          textIndexRef.current =
+            (textIndexRef.current + 1) % PLACEHOLDER_TEXTS.length;
+          timeoutRef.current = setTimeout(animate, TYPING_SPEED);
+        }
+      }
+    };
+
+    animate();
+
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
+
+  return (
+    <div className="border-border w-full rounded-xl border p-4">
+      {/* AI Badge */}
+      <div className="mb-2 flex items-center gap-1.5">
+        <SparkleIcon className="h-3.5 w-3.5 animate-pulse" />
+        <span className="bg-linear-to-r from-indigo-400 via-violet-400 to-purple-400 bg-clip-text text-xs font-medium text-transparent">
+          AI-Powered Search
+        </span>
+      </div>
+
+      {/* Search Container */}
+      <div className="group relative rounded-xl">
+        {/* Animated Gradient Border */}
+        <div
+          className={cn(
+            "absolute -inset-px rounded-xl bg-linear-to-r from-indigo-500 via-violet-500 to-purple-500 opacity-60 blur-sm transition-all duration-300",
+          )}
+        />
+        <div
+          className={cn(
+            "absolute -inset-px rounded-xl bg-linear-to-r from-indigo-500 via-violet-500 to-purple-500 opacity-60 transition-all duration-300",
+          )}
+        />
+
+        {/* Input Container */}
+        <div className="bg-background dark:bg-background/80 relative flex items-center gap-3 rounded-xl border border-transparent px-4 py-3 backdrop-blur-sm">
+          {/* Sparkle Icon */}
+          <div className="relative shrink-0">
+            <SparkleIcon
+              className={cn(
+                "h-5 w-5 transition-all duration-300",
+                isFocused ? "scale-110" : "scale-100",
+              )}
+            />
+            {/* Sparkle Glow */}
+            <div
+              className={cn(
+                "absolute inset-0 h-5 w-5 rounded-full bg-violet-400/50 blur-md transition-opacity duration-300",
+                isFocused ? "opacity-100" : "opacity-0",
+              )}
+            />
+          </div>
+
+          {/* Input */}
+          <input
+            type="text"
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
+            placeholder={placeholder || ""}
+            className={cn(
+              "text-foreground placeholder:text-muted-foreground/70 flex-1 bg-transparent text-sm outline-none",
+              "transition-all duration-200",
+            )}
+          />
+
+          {/* Search Hint */}
+          <div
+            className={cn(
+              "flex items-center gap-1 transition-all duration-300",
+              isFocused || searchValue
+                ? "translate-x-0 opacity-100"
+                : "translate-x-2 opacity-0",
+            )}
+          >
+            <kbd className="border-border bg-muted text-muted-foreground hidden h-5 items-center gap-1 rounded border px-1.5 font-mono text-[10px] font-medium sm:inline-flex">
+              <span className="text-xs">⏎</span>
+            </kbd>
+          </div>
+
+          {/* Clear Button */}
+          {searchValue && (
+            <button
+              onClick={() => setSearchValue("")}
+              className="bg-muted hover:bg-muted-foreground/20 flex h-5 w-5 shrink-0 items-center justify-center rounded-full transition-colors"
+            >
+              <svg
+                className="text-muted-foreground h-3 w-3"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Helper Text */}
+      <p className="text-muted-foreground/60 mt-2 pl-1 text-xs">
+        Ask anything about your journal entries using natural language
+      </p>
+    </div>
+  );
+};
+
+export default SearchJournal;

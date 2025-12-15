@@ -3,15 +3,20 @@ import Header from "@/components/homepage/Header";
 import JournalCardSkeleton from "@/components/skeleton/JournalCardSkeleton";
 import { Suspense } from "react";
 import AnalyticCard from "@/components/homepage/AnalyticCard";
+import SearchJournal from "@/components/homepage/SearchJournal";
 
 export default function Home() {
   return (
-    <div className="space-y-4 flex flex-col lg:flex-row lg:gap-4 gap-2">
+    <div className="flex flex-col gap-2 space-y-4 lg:flex-row lg:gap-4">
       <Header />
-      <Suspense fallback={<JournalCardSkeleton />}>
-        <AppJournalCardList />
-      </Suspense>
-      <AnalyticCard />
+
+      <div className="flex w-full flex-col gap-5">
+        <SearchJournal />
+        <Suspense fallback={<JournalCardSkeleton />}>
+          <AppJournalCardList />
+        </Suspense>
+      </div>
+      <AnalyticCard className="hidden lg:block" />
     </div>
   );
 }

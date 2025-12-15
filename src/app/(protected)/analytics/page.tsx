@@ -1,7 +1,9 @@
+import AnalyticCard from "@/components/homepage/AnalyticCard";
+
 const AnalyticsPage = () => {
   return (
     <div>
-      <h1>Analytics</h1>
+      <AnalyticCard className="border-0 p-0" />
     </div>
   );
 };
