@@ -10,6 +10,7 @@ import { useState } from "react";
 import { Progress } from "../ui";
 import { REQUIRED_JOURNALS } from "@/common/constants";
 import { Folder, Plus } from "lucide-react";
+import Link from "next/link";
 
 const Header = () => {
   const router = useRouter();
@@ -117,13 +118,20 @@ const Header = () => {
           </div>
         </div>
       </div>
-      <div className="hidden lg:block lg:space-y-1">
-        <p className="text-muted-foreground/60 w-fit cursor-pointer text-xs hover:underline">
+      <div className="hidden flex-col lg:flex lg:space-y-1">
+        <Link
+          href={ROUTES.RELEASE_NOTES}
+          className="text-muted-foreground/60 w-fit cursor-pointer text-xs hover:underline"
+        >
           Release Notes
-        </p>
-        <p className="text-muted-foreground/60 w-fit cursor-pointer text-xs hover:underline">
+        </Link>
+        <Link
+          href={ROUTES.CONTACT_DEVELOPER}
+          target="_blank"
+          className="text-muted-foreground/60 w-fit cursor-pointer text-xs hover:underline"
+        >
           Contact Developer
-        </p>
+        </Link>
       </div>
     </div>
   );

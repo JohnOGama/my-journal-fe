@@ -6,13 +6,15 @@ import { Calendar, AlertCircle, Zap, Clock, BookOpen } from "lucide-react";
 import { useState } from "react";
 import ViewJournalDrawer from "./drawer/ViewJournalDrawer/ViewJournalDrawer";
 import { highlightText } from "@/helper/highlightText";
-import { useQueryState } from "nuqs";
 import JournalCardSkeleton from "./skeleton/JournalCardSkeleton";
 import { useQueryStore } from "@/store/useQueryStore";
 
 export const AppJournalCardList = () => {
   const { query, setQuery } = useQueryStore();
-  const { data, isLoading, error } = useGetUserJournals({ search: query });
+  const { data, isLoading, error } = useGetUserJournals({
+    search: query.search,
+    type: query.type,
+  });
 
   if (isLoading) {
     return <JournalCardSkeleton />;
@@ -67,7 +69,7 @@ export const AppJournalCardList = () => {
 
           {isUsageLimitError && (
             <div
-              onClick={() => setQuery("")}
+              onClick={() => setQuery({ search: "", type: "ai" })}
               className="bg-muted/50 flex cursor-pointer items-center gap-2 rounded-md px-4 py-2 text-sm"
             >
               <Clock className="text-muted-foreground size-4" />
@@ -84,7 +86,7 @@ export const AppJournalCardList = () => {
   }
 
   if (!data?.data) {
-    const hasSearchQuery = query && query.trim().length > 0;
+    const hasSearchQuery = query.search && query.search.trim().length > 0;
 
     return (
       <div className="flex h-full min-h-[400px] items-center justify-center p-6">
@@ -118,7 +120,7 @@ export const AppJournalCardList = () => {
 };
 
 export const AppJournalCard = ({ journal }: { journal: Journal }) => {
-  const [query] = useQueryState("q", { defaultValue: "" });
+  const { query } = useQueryStore();
   const [selectedJournalId, setSelectedJournalId] = useState<string | null>(
     null,
   );
@@ -131,13 +133,13 @@ export const AppJournalCard = ({ journal }: { journal: Journal }) => {
       >
         <h1
           dangerouslySetInnerHTML={{
-            __html: highlightText(journal.title, query),
+            __html: highlightText(journal.title, query.search),
           }}
           className="line-clamp-1 text-sm font-semibold"
         />
         <p
           dangerouslySetInnerHTML={{
-            __html: highlightText(journal.content, query),
+            __html: highlightText(journal.content, query.search),
           }}
           className="text-muted-foreground line-clamp-3 text-sm"
         />

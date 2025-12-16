@@ -13,3 +13,4 @@ export * from "./alert-dialog";
 export * from "./select";
 export * from "./calendar";
 export * from "./progress";
+export * from "./badge";

@@ -5,6 +5,7 @@ interface getUserJournalQuery {
   page?: number;
   limit?: number;
   search?: string;
+  type?: "ai" | "fts";
 }
 
 export interface Journal {
