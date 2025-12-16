@@ -5,11 +5,10 @@ import * as DialogPrimitive from "@radix-ui/react-dialog";
 
 import { cn } from "@/libs/shadcn";
 
-interface ModalProps
-  extends Omit<
-    React.ComponentProps<typeof DialogPrimitive.Root>,
-    "open" | "onOpenChange"
-  > {
+interface ModalProps extends Omit<
+  React.ComponentProps<typeof DialogPrimitive.Root>,
+  "open" | "onOpenChange"
+> {
   isOpen?: boolean;
   onClose?: (open: boolean) => void;
 }
@@ -51,8 +50,8 @@ function ModalOverlay({
     <DialogPrimitive.Overlay
       data-slot="modal-overlay"
       className={cn(
-        "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-black/50",
-        className
+        "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-black/50 backdrop-blur-sm",
+        className,
       )}
       {...props}
     />
@@ -67,11 +66,12 @@ function ModalContent({
   return (
     <ModalPortal>
       <ModalOverlay />
+      <DialogPrimitive.Title />
       <DialogPrimitive.Content
         data-slot="modal-content"
         className={cn(
           "bg-background data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed top-1/2 left-1/2 z-50 -translate-x-1/2 -translate-y-1/2 rounded-lg shadow-lg duration-200",
-          className
+          className,
         )}
         {...props}
       >

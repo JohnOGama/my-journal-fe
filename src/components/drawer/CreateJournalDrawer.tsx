@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import AppDrawer from "../AppDrawer";
+import AppModal from "../AppModal";
 import { Button, Input, Textarea } from "../ui";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -44,7 +44,7 @@ const CreateJournalDrawer = () => {
   };
 
   return (
-    <AppDrawer
+    <AppModal
       open={open}
       onOpenChange={setOpen}
       trigger={
@@ -91,7 +91,7 @@ const CreateJournalDrawer = () => {
           {isSubmitting ? "Creating..." : "Create Journal"}
         </Button>
       </form>
-    </AppDrawer>
+    </AppModal>
   );
 };
 

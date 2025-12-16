@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useGetJournal } from "@/features/journal/queries";
 import { useUpdateJournal } from "@/features/journal/mutations";
-import AppDrawer from "../../AppDrawer";
+import AppModal from "../../AppModal";
 import { Skeleton } from "../../ui/skeleton";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -84,7 +84,7 @@ const ViewJournalDrawer = ({
   }, [journal, reset]);
 
   return (
-    <AppDrawer
+    <AppModal
       title={isEditing ? "Edit Journal" : "View Journal"}
       open={open}
       onOpenChange={handleOpenChange}
@@ -105,7 +105,7 @@ const ViewJournalDrawer = ({
       ) : (
         <ReadOnlyForm journal={journal} setIsEditing={setIsEditing} />
       )}
-    </AppDrawer>
+    </AppModal>
   );
 };
 
@@ -131,7 +131,7 @@ function ViewJournalSkeleton() {
       </div>
 
       {/* Divider */}
-      <div className="h-px bg-linear-to-r from-border via-border/50 to-transparent" />
+      <div className="from-border via-border/50 h-px bg-linear-to-r to-transparent" />
 
       {/* Content */}
       <div className="space-y-3">
