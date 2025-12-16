@@ -3,8 +3,11 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { cn } from "@/libs/shadcn";
 import { SparkleIcon } from "../icons/svg";
-import { useGetUserJournals } from "@/features/journal/queries";
 import { useQueryStore } from "@/store/useQueryStore";
+import { useGetUserData } from "@/features/user/queries";
+import { REQUIRED_JOURNALS } from "@/common/constants";
+import { toast } from "sonner";
+import { LockKeyhole } from "lucide-react";
 
 const PLACEHOLDER_TEXTS = [
   "What happened today?",
@@ -31,15 +34,30 @@ const SearchJournal = ({
   const isDeletingRef = useRef(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const { query, setQuery } = useQueryStore();
+  const { setQuery } = useQueryStore();
 
-  const { data: journals } = useGetUserJournals({ search: query });
+  const { data } = useGetUserData();
+  const totalJournals = data?.data?.journalEntries?.totalJournals || 0;
 
   const handleSearch = useCallback(() => {
+    if (totalJournals !== REQUIRED_JOURNALS) {
+      toast.error("You need to write 20 journals to use the AI search");
+      return;
+    }
     setQuery(searchValue);
     setIsFocused(false);
     setSearchValue("");
-  }, [setQuery, setIsFocused, searchValue]);
+  }, [setQuery, setIsFocused, searchValue, totalJournals]);
+
+  const handleUnlockAI = useCallback(() => {
+    const progressElement = document.getElementById("ai-progress");
+    if (progressElement) {
+      progressElement.classList.add("border-primary");
+      setTimeout(() => {
+        progressElement.classList.remove("border-primary");
+      }, 2000);
+    }
+  }, []);
 
   useEffect(() => {
     const animate = () => {
@@ -82,7 +100,7 @@ const SearchJournal = ({
   return (
     <div
       className={cn(
-        "border-border w-full rounded-xl border p-4",
+        "border-border relative w-full rounded-xl border p-4",
         containerClassName,
       )}
     >
@@ -143,6 +161,8 @@ const SearchJournal = ({
             className={cn(
               "text-foreground placeholder:text-muted-foreground/70 flex-1 bg-transparent text-sm outline-none",
               "transition-all duration-200",
+              totalJournals !== REQUIRED_JOURNALS &&
+                "pointer-events-none cursor-not-allowed",
             )}
           />
 
@@ -168,7 +188,7 @@ const SearchJournal = ({
                 setSearchValue("");
                 setQuery("");
               }}
-              className="bg-muted hover:bg-muted-foreground/20 flex h-5 w-5 shrink-0 items-center justify-center rounded-full transition-colors"
+              className="bg-muted hover:bg-muted-foreground/20 flex h-5 w-5 shrink-0 cursor-pointer items-center justify-center rounded-full transition-colors"
             >
               <svg
                 className="text-muted-foreground h-3 w-3"
@@ -189,10 +209,23 @@ const SearchJournal = ({
       </div>
 
       {/* Helper Text */}
-      <p className="text-muted-foreground/60 mt-2 pl-1 text-xs">
-        Ask anything about your journal entries using natural language (5
-        searches per day)
-      </p>
+
+      <div className="mt-2 flex items-center justify-between">
+        <p className="text-muted-foreground/60 pl-1 text-xs">
+          {totalJournals !== REQUIRED_JOURNALS
+            ? `Write ${REQUIRED_JOURNALS} journals to unlock AI-powered search`
+            : "Ask anything about your journal entries using natural language (5 searches per day)"}
+        </p>
+        {totalJournals !== REQUIRED_JOURNALS && (
+          <div
+            onClick={handleUnlockAI}
+            className="text-muted-foreground/60 hidden cursor-pointer items-center gap-1.5 lg:flex"
+          >
+            <LockKeyhole className="size-3" />
+            <span className="text-xs font-medium">Unlock AI Search</span>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

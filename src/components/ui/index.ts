@@ -12,3 +12,4 @@ export * from "./modal";
 export * from "./alert-dialog";
 export * from "./select";
 export * from "./calendar";
+export * from "./progress";

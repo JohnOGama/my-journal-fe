@@ -5,6 +5,7 @@ import ReactQueryProvider from "./ReactQueryProvider";
 import { UserProvider } from "./UserProvider";
 import NuqsAdapterProvider from "./NuqsAdapter";
 import { ThemeProvider } from "./ThemeProvider";
+import { Toaster } from "sonner";
 
 const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -12,6 +13,7 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
       <ReactQueryProvider>
         <NuqsAdapterProvider>
           <UserProvider>{children}</UserProvider>
+          <Toaster position="bottom-left" />
         </NuqsAdapterProvider>
       </ReactQueryProvider>
     </ThemeProvider>

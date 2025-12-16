@@ -43,3 +43,5 @@ export const MOOD_OPTIONS = [
   { label: "😲 Surprised", value: "surprised" },
   { label: "😑 Bored", value: "bored" },
 ];
+
+export const REQUIRED_JOURNALS = 20;
