@@ -1,9 +1,47 @@
+"use client";
 import { FileText, Flame } from "lucide-react";
 import { Calendar, Separator } from "../ui";
 import { SparkleIcon } from "../icons/svg";
 import { cn } from "@/libs/shadcn";
+import { useGetUserAnalytics } from "@/features/analytics/queries";
+import { getYearMonth } from "@/helper/getYearMonth";
+import { useState } from "react";
+import type { CalendarDay, Modifiers } from "react-day-picker";
 
 const AnalyticCard = ({ className }: { className?: string }) => {
+  const [currentMonth, setCurrentMonth] = useState<string>(
+    getYearMonth(new Date()),
+  );
+  const { data } = useGetUserAnalytics({ month: currentMonth });
+  const totalJournals = data?.data?.totalJournals;
+  const averageWords = data?.data?.averageWords;
+  const entriesDates = data?.data?.entriesDates;
+
+  const handleMonthChange = (date: Date) => {
+    const yearMonth = getYearMonth(date);
+    setCurrentMonth(yearMonth);
+  };
+
+  const CustomDay = (
+    props: {
+      day: CalendarDay;
+      modifiers: Modifiers;
+      className?: string;
+    } & React.HTMLAttributes<HTMLDivElement>,
+  ) => {
+    const hasEntry = props.modifiers?.hasEntry ?? false;
+    return (
+      <div className={cn("relative", props.className)}>
+        <span>{props.day.date.getDate()}</span>
+        {hasEntry && (
+          <div className="absolute bottom-1 flex w-full items-center justify-center">
+            <div className="bg-primary h-1 w-[50%] rounded-md" />
+          </div>
+        )}
+      </div>
+    );
+  };
+
   return (
     <div
       className={cn(
@@ -16,22 +54,39 @@ const AnalyticCard = ({ className }: { className?: string }) => {
       <GeneratedAiSummaryWeek description="This week was filled with happiness and a strong sense of progress." />
 
       <div className="w-full">
-        <h1>Streak</h1>
-        <div className="flex items-center">
+        <h1>Total Journals</h1>
+        <div className="flex items-center gap-1">
           <Flame fill="currentColor" className="text-orange-400" />
-          <p className="text-2xl font-bold">20</p>
+          <p className="text-2xl font-bold">{totalJournals}</p>
         </div>
       </div>
       <div className="w-full">
-        <h1>Words per entry</h1>
-        <div className="flex items-center">
+        <h1>Average Words</h1>
+        <div className="flex items-center gap-1">
           <FileText className="text-orange-400" />
-          <p className="text-2xl font-bold">20</p>
+          <p className="text-2xl font-bold">{averageWords}</p>
         </div>
       </div>
 
       <div className="border-border rounded-md border">
-        <Calendar className="w-full" />
+        <Calendar
+          className="w-full"
+          onMonthChange={handleMonthChange}
+          components={{
+            Day: CustomDay,
+          }}
+          modifiers={{
+            hasEntry: (date: Date) => {
+              if (!entriesDates) return false;
+              const dateString = date.toDateString();
+              return entriesDates.some((entryDate) => {
+                const entryDateObj =
+                  entryDate instanceof Date ? entryDate : new Date(entryDate);
+                return entryDateObj.toDateString() === dateString;
+              });
+            },
+          }}
+        />
       </div>
     </div>
   );
