@@ -9,6 +9,7 @@ import { Input } from "@/components/ui";
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/libs/authClient";
 import { ROUTES } from "@/features/route";
+import { toast } from "sonner";
 
 const LoginPage = () => {
   const router = useRouter();
@@ -25,17 +26,17 @@ const LoginPage = () => {
 
   const onSubmit = async (data: LoginSchemaT) => {
     try {
-      // Cookie is automatically set by the server response
       const { error } = await authClient.signIn.email({
         email: data.email,
         password: data.password,
       });
 
       if (error) {
-        console.error("Login failed:", error);
+        toast.error(error.message || "Login failed");
         return;
       }
 
+      toast.success("Login successful");
       router.push(ROUTES.PROCESSING);
     } catch (error) {
       console.error("Login error:", error);
@@ -43,7 +44,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="w-full h-full flex flex-col justify-center  space-y-4 max-w-sm mx-auto ">
+    <div className="mx-auto flex h-full w-full max-w-sm flex-col justify-center space-y-4">
       <div>
         <h1 className="text-xl font-semibold">Sign in to your account</h1>
         <p className="text-xs text-gray-400">
@@ -74,7 +75,7 @@ const LoginPage = () => {
 
       <p className="text-xs text-gray-400">
         Don&apos;t have an account?{" "}
-        <Link href="/register" className="hover:underline ">
+        <Link href="/register" className="hover:underline">
           Register
         </Link>
       </p>

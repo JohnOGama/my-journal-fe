@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { registerSchema, RegisterSchemaT } from "./forms/register.schema";
 import { authClient } from "@/libs/authClient";
 import { ROUTES } from "@/features/route";
+import { toast } from "sonner";
 
 const RegisterPage = () => {
   const router = useRouter();
@@ -25,7 +26,6 @@ const RegisterPage = () => {
 
   const onSubmit = async (data: RegisterSchemaT) => {
     try {
-      // Cookie is automatically set by the server response
       const { error } = await authClient.signUp.email({
         name: data.name,
         email: data.email,
@@ -33,18 +33,19 @@ const RegisterPage = () => {
       });
 
       if (error) {
-        console.error("Registration failed:", error);
+        toast.error(error.message || "Registration failed");
         return;
       }
 
       router.push(ROUTES.LOGIN);
+      toast.success("Registration successful");
     } catch (error) {
       console.error("Registration error:", error);
     }
   };
 
   return (
-    <div className="w-full h-full flex flex-col justify-center  space-y-4 max-w-sm mx-auto ">
+    <div className="mx-auto flex h-full w-full max-w-sm flex-col justify-center space-y-4">
       <div>
         <h1 className="text-xl font-semibold">Create your account</h1>
         <p className="text-xs text-gray-400">
@@ -80,7 +81,7 @@ const RegisterPage = () => {
 
       <p className="text-xs text-gray-400">
         Already have an account?{" "}
-        <Link href="/login" className="hover:underline ">
+        <Link href="/login" className="hover:underline">
           Login
         </Link>
       </p>
