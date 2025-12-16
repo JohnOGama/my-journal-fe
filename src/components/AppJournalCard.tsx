@@ -8,9 +8,10 @@ import ViewJournalDrawer from "./drawer/ViewJournalDrawer/ViewJournalDrawer";
 import { highlightText } from "@/helper/highlightText";
 import { useQueryState } from "nuqs";
 import JournalCardSkeleton from "./skeleton/JournalCardSkeleton";
+import { useQueryStore } from "@/store/useQueryStore";
 
 export const AppJournalCardList = () => {
-  const [query, setQuery] = useQueryState("q", { defaultValue: "" });
+  const { query, setQuery } = useQueryStore();
   const { data, isLoading, error } = useGetUserJournals({ search: query });
 
   if (isLoading) {

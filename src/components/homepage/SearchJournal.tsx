@@ -3,8 +3,8 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { cn } from "@/libs/shadcn";
 import { SparkleIcon } from "../icons/svg";
-import { useQueryState } from "nuqs";
 import { useGetUserJournals } from "@/features/journal/queries";
+import { useQueryStore } from "@/store/useQueryStore";
 
 const PLACEHOLDER_TEXTS = [
   "What happened today?",
@@ -31,17 +31,15 @@ const SearchJournal = ({
   const isDeletingRef = useRef(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const [query, setQuery] = useQueryState("q", {
-    defaultValue: "",
-  });
+  const { query, setQuery } = useQueryStore();
 
   const { data: journals } = useGetUserJournals({ search: query });
 
   const handleSearch = useCallback(() => {
     setQuery(searchValue);
-    setSearchValue("");
     setIsFocused(false);
-  }, [searchValue, setQuery, setSearchValue, setIsFocused]);
+    setSearchValue("");
+  }, [setQuery, setIsFocused, searchValue]);
 
   useEffect(() => {
     const animate = () => {
@@ -150,8 +148,9 @@ const SearchJournal = ({
 
           {/* Search Hint */}
           <div
+            onClick={handleSearch}
             className={cn(
-              "flex items-center gap-1 transition-all duration-300",
+              "flex cursor-pointer items-center gap-1 transition-all duration-300",
               isFocused || searchValue
                 ? "translate-x-0 opacity-100"
                 : "translate-x-2 opacity-0",
