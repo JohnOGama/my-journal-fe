@@ -10,7 +10,12 @@ const ProcessingPage = () => {
 
   const getSession = useCallback(async () => {
     const session = await authClient.getSession();
-    
+
+    if (session?.error) {
+      router.push(ROUTES.LOGIN);
+      return;
+    }
+
     if (session?.data?.user) {
       router.push(ROUTES.HOME);
     }
