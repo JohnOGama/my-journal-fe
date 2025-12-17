@@ -36,8 +36,8 @@ const AISearch = () => {
   const totalJournals = data?.data?.journalEntries?.totalJournals || 0;
 
   const handleSearch = useCallback(() => {
-    if (totalJournals !== REQUIRED_JOURNALS) {
-      toast.error("You need to write 20 journals to use the AI search");
+    if (totalJournals < REQUIRED_JOURNALS) {
+      toast.error(`You need to write ${REQUIRED_JOURNALS} journals to use the AI search`);
       return;
     }
     setQuery({ search: searchValue, type: "ai" });
@@ -152,7 +152,7 @@ const AISearch = () => {
             className={cn(
               "text-foreground placeholder:text-muted-foreground/70 flex-1 bg-transparent text-sm outline-none",
               "transition-all duration-200",
-              totalJournals !== REQUIRED_JOURNALS &&
+              totalJournals < REQUIRED_JOURNALS &&
                 "pointer-events-none cursor-not-allowed",
             )}
           />
@@ -202,11 +202,11 @@ const AISearch = () => {
       {/* Helper Text */}
       <div className="mt-2 flex items-center justify-between">
         <p className="text-muted-foreground/60 pl-1 text-xs">
-          {totalJournals !== REQUIRED_JOURNALS
+          {totalJournals < REQUIRED_JOURNALS
             ? `Write ${REQUIRED_JOURNALS} journals to unlock AI-powered search`
             : "Ask anything about your journal entries using natural language (5 searches per day)"}
         </p>
-        {totalJournals !== REQUIRED_JOURNALS && (
+        {totalJournals < REQUIRED_JOURNALS && (
           <div
             onClick={handleUnlockAI}
             className="text-muted-foreground/60 hidden cursor-pointer items-center gap-1.5 lg:flex"
