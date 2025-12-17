@@ -10,7 +10,6 @@ import { Button } from "@/components/ui/button";
 import { authClient } from "@/libs/authClient";
 import { ROUTES } from "@/features/route";
 import { toast } from "sonner";
-import { EyeIcon } from "lucide-react";
 import { useState } from "react";
 
 const LoginPage = () => {
@@ -67,13 +66,6 @@ const LoginPage = () => {
           type={showPassword ? "text" : "password"}
           {...register("password")}
           error={errors.password?.message}
-          iconPosition="right"
-          icon={
-            <EyeIcon
-              onClick={() => setShowPassword(!showPassword)}
-              className="text-muted-foreground size-4 cursor-pointer"
-            />
-          }
         />
         <Button
           loading={isSubmitting}
