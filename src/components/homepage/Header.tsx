@@ -22,6 +22,8 @@ const Header = () => {
     ? (totalJournals / REQUIRED_JOURNALS) * 100
     : 0;
 
+  const isCompleted = totalJournals >= REQUIRED_JOURNALS;
+
   const handleSignOut = async () => {
     setLoading(true);
     await signOut();
@@ -52,15 +54,18 @@ const Header = () => {
         <div className="flex items-center justify-between">
           <div className="space-y-0.5">
             <h2 className="text-sm font-semibold">Your Progress</h2>
-            <p className="text-muted-foreground/70 text-xs">
-              {isLoading ? (
-                "Loading progress..."
-              ) : (
-                <>
-                  {totalJournals} of {REQUIRED_JOURNALS} journals completed
-                </>
-              )}
-            </p>
+
+            {!isCompleted && (
+              <p className="text-muted-foreground/70 text-xs">
+                {isLoading ? (
+                  "Loading progress..."
+                ) : (
+                  <>
+                    {totalJournals} of {REQUIRED_JOURNALS} journals completed
+                  </>
+                )}
+              </p>
+            )}
           </div>
           <div className="bg-muted/50 flex items-center gap-1.5 rounded-full px-2.5 py-1">
             <span className="text-xs font-medium tabular-nums">
@@ -78,7 +83,7 @@ const Header = () => {
             <p className="text-muted-foreground/90 text-xs leading-relaxed">
               {isLoading ? (
                 "Loading..."
-              ) : totalJournals >= REQUIRED_JOURNALS ? (
+              ) : isCompleted ? (
                 <span className="text-foreground font-medium">
                   Congratulations! You can now unlock the AI feature.
                 </span>

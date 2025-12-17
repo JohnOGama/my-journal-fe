@@ -34,10 +34,13 @@ const AISearch = () => {
 
   const { data } = useGetUserData();
   const totalJournals = data?.data?.journalEntries?.totalJournals || 0;
+  const isCompleted = totalJournals >= REQUIRED_JOURNALS;
 
   const handleSearch = useCallback(() => {
     if (totalJournals < REQUIRED_JOURNALS) {
-      toast.error(`You need to write ${REQUIRED_JOURNALS} journals to use the AI search`);
+      toast.error(
+        `You need to write ${REQUIRED_JOURNALS} journals to use the AI search`,
+      );
       return;
     }
     setQuery({ search: searchValue, type: "ai" });
@@ -202,11 +205,11 @@ const AISearch = () => {
       {/* Helper Text */}
       <div className="mt-2 flex items-center justify-between">
         <p className="text-muted-foreground/60 pl-1 text-xs">
-          {totalJournals < REQUIRED_JOURNALS
+          {!isCompleted
             ? `Write ${REQUIRED_JOURNALS} journals to unlock AI-powered search`
             : "Ask anything about your journal entries using natural language (5 searches per day)"}
         </p>
-        {totalJournals < REQUIRED_JOURNALS && (
+        {!isCompleted && (
           <div
             onClick={handleUnlockAI}
             className="text-muted-foreground/60 hidden cursor-pointer items-center gap-1.5 lg:flex"
