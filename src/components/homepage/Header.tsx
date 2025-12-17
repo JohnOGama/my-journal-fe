@@ -21,7 +21,6 @@ const Header = () => {
   const progress = totalJournals
     ? (totalJournals / REQUIRED_JOURNALS) * 100
     : 0;
-  const isCompleted = totalJournals >= REQUIRED_JOURNALS;
 
   const handleSignOut = async () => {
     setLoading(true);
@@ -56,10 +55,6 @@ const Header = () => {
             <p className="text-muted-foreground/70 text-xs">
               {isLoading ? (
                 "Loading progress..."
-              ) : isCompleted ? (
-                <span className="text-foreground font-medium">
-                  Completed all {REQUIRED_JOURNALS} journals
-                </span>
               ) : (
                 <>
                   {totalJournals} of {REQUIRED_JOURNALS} journals completed
@@ -69,17 +64,13 @@ const Header = () => {
           </div>
           <div className="bg-muted/50 flex items-center gap-1.5 rounded-full px-2.5 py-1">
             <span className="text-xs font-medium tabular-nums">
-              {isLoading
-                ? "—"
-                : isCompleted
-                  ? "100%"
-                  : `${Math.round(progress)}%`}
+              {isLoading ? "—" : `${Math.round(progress)}%`}
             </span>
           </div>
         </div>
         <div className="space-y-2">
           <Progress
-            value={isLoading ? 0 : isCompleted ? 100 : progress}
+            value={isLoading ? 0 : progress}
             className="h-2.5"
             aria-label={`Progress: ${Math.round(progress)}% towards ${REQUIRED_JOURNALS} journals`}
           />
@@ -87,13 +78,17 @@ const Header = () => {
             <p className="text-muted-foreground/90 text-xs leading-relaxed">
               {isLoading ? (
                 "Loading..."
-              ) : isCompleted ? (
+              ) : totalJournals >= REQUIRED_JOURNALS ? (
                 <span className="text-foreground font-medium">
                   Congratulations! You can now unlock the AI feature.
                 </span>
               ) : (
                 <>
-                  {totalJournals} of {REQUIRED_JOURNALS} journals completed
+                  <span className="text-foreground font-medium">
+                    {REQUIRED_JOURNALS - totalJournals} more journal
+                    {REQUIRED_JOURNALS - totalJournals !== 1 ? "s" : ""}
+                  </span>{" "}
+                  to unlock the AI feature.
                 </>
               )}
             </p>
