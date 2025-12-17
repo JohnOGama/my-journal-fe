@@ -6,6 +6,7 @@ import {
   updateJournalAPI,
   updateJournalBody,
 } from "./api";
+import { getYearMonth } from "@/helper/getYearMonth";
 
 export const useCreateJournal = () => {
   const queryClient = useQueryClient();
@@ -13,6 +14,10 @@ export const useCreateJournal = () => {
     mutationFn: (body: createJournalBody) => createJournalAPI(body),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["journals"] });
+      queryClient.invalidateQueries({ queryKey: ["user-data"] });
+      queryClient.invalidateQueries({
+        queryKey: ["user-analytics", getYearMonth(new Date())],
+      });
     },
   });
   return {
