@@ -37,7 +37,9 @@ const LoginPage = () => {
       }
 
       toast.success("Login successful");
-      router.push(ROUTES.PROCESSING);
+      setTimeout(() => {
+        router.push(ROUTES.PROCESSING);
+      }, 800);
     } catch (error) {
       console.error("Login error:", error);
     }

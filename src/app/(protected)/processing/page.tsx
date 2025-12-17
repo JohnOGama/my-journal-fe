@@ -3,24 +3,36 @@ import AppProcessingPage from "@/components/AppProcessingPage";
 import { ROUTES } from "@/features/route";
 import { authClient } from "@/libs/authClient";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 
 const ProcessingPage = () => {
   const router = useRouter();
 
-  const getSession = useCallback(async () => {
-    const session = await authClient.getSession();
-    if (session?.data?.user) {
-      router.push(ROUTES.HOME);
-    }
+  useEffect(() => {
+    let retryCount = 0;
+    const MAX_RETRIES = 1;
+
+    const getSession = async () => {
+      try {
+        const session = await authClient.getSession();
+        if (session?.data?.user) {
+          router.push(ROUTES.HOME);
+        }
+      } catch {
+        if (retryCount < MAX_RETRIES) {
+          retryCount++;
+          setTimeout(() => {
+            getSession();
+          }, 1000);
+        }
+      }
+    };
+
+    getSession();
   }, [router]);
 
-  useEffect(() => {
-    getSession();
-  }, [getSession]);
-
   return (
-    <div className="h-full flex flex-col justify-center items-center">
+    <div className="flex h-full flex-col items-center justify-center">
       <AppProcessingPage
         title="Processing your account"
         description="We are processing your account. Please wait..."
