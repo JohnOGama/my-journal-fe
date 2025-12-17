@@ -53,7 +53,7 @@ const SearchJournal = ({
           }}
         >
           <Search className="h-3.5 w-3.5" />
-          <span>Semantic Search</span>
+          <span>Full Text Search</span>
         </Button>
       </div>
 
