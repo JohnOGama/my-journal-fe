@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { checkTokenExpiration } from "./libs/jwt";
 
-const publicRoutes = ["/login", "/register", "/forgot-password"];
+const publicRoutes = ["/login", "/register", "/forgot-password", "/processing"];
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
