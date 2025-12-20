@@ -2,12 +2,23 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import AppModal from "../AppModal";
-import { Button, Input, Textarea } from "../ui";
+import { Button, Input } from "../ui";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useCreateJournal } from "@/features/journal/mutations";
 import AppSelect from "../AppSelect";
 import { MOOD_OPTIONS } from "@/common/constants";
+import dynamic from "next/dynamic";
+const LazyRichTextEditor = dynamic(
+  () => import("@/components/rich-text-editor/RichTextEditor"),
+  {
+    loading({ isLoading }) {
+      if (isLoading) {
+        return <div>Loading...</div>;
+      }
+    },
+  },
+);
 
 const createJournalForm = z.object({
   title: z.string().min(1, { message: "Title is required" }),
@@ -76,11 +87,10 @@ const CreateJournalDrawer = () => {
           className="w-full"
           contentClassName="h-[200px]"
         />
-        <Textarea
-          {...register("content")}
-          error={errors.content?.message}
-          placeholder="Journal Content"
-          className="h-[300px]"
+        <LazyRichTextEditor
+          onChange={(value: string) => {
+            form.setValue("content", value);
+          }}
         />
         <Button
           loading={isSubmitting}
