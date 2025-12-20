@@ -42,14 +42,14 @@ const AnalyticCard = ({ className }: { className?: string }) => {
   ) => {
     const hasEntry = props.modifiers?.hasEntry ?? false;
     return (
-      <div className={cn("relative", props.className)}>
+      <td className={cn("relative", props.className)}>
         <span>{props.day.date.getDate()}</span>
         {hasEntry && (
           <div className="absolute bottom-1 flex w-full items-center justify-center">
             <div className="bg-primary h-1 w-[50%] rounded-md" />
           </div>
         )}
-      </div>
+      </td>
     );
   };
 

@@ -17,6 +17,7 @@ const LazyRichTextEditor = dynamic(
         return <div>Loading...</div>;
       }
     },
+    ssr: false,
   },
 );
 
