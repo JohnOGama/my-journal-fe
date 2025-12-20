@@ -10,20 +10,14 @@ import { SavePlugin } from "./config/savePlugin";
 
 export default function RichTextEditor({
   onChange,
-  type = "editable",
-  jsonContent,
+  savedJson,
 }: {
   onChange: (value: string) => void;
-  type?: "editable" | "readonly";
-  jsonContent?: string;
+  savedJson?: string;
 }) {
   return (
     <LexicalComposer
-      initialConfig={{
-        ...editorConfig,
-        editable: type === "editable",
-        editorState: type === "readonly" ? jsonContent : undefined,
-      }}
+      initialConfig={{ ...editorConfig, editorState: savedJson }}
     >
       <div className="border-border bg-input/30 relative rounded-md border">
         <Toolbar />
@@ -40,7 +34,7 @@ export default function RichTextEditor({
         />
       </div>
       <HistoryPlugin />
-      <SavePlugin onChange={onChange} />
+      <SavePlugin onChange={onChange ?? (() => {})} />
     </LexicalComposer>
   );
 }

@@ -1,3 +1,4 @@
+import RenderedRichText from "@/components/rich-text-editor/RenderedRichText";
 import {
   AlertDialogAction,
   AlertDialogCancel,
@@ -27,7 +28,7 @@ const ReadOnlyForm = ({
       {/* Header: Mood Badge & Edit Button */}
       <div className="flex items-center justify-between">
         {journal?.mood && (
-          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-medium">
+          <span className="bg-primary/10 text-primary inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium">
             <Sparkles size={12} />
             {journal.mood}
           </span>
@@ -47,11 +48,11 @@ const ReadOnlyForm = ({
 
       {/* Title */}
       <div className="space-y-2">
-        <h1 className="text-2xl font-bold tracking-tight leading-tight text-foreground">
+        <h1 className="text-foreground text-2xl leading-tight font-bold tracking-tight">
           {journal?.title}
         </h1>
         {/* Date */}
-        <div className="flex items-center gap-1.5 text-muted-foreground">
+        <div className="text-muted-foreground flex items-center gap-1.5">
           <Calendar size={14} className="opacity-70" />
           {journal?.updatedAt ? (
             <time className="text-sm">
@@ -66,14 +67,10 @@ const ReadOnlyForm = ({
       </div>
 
       {/* Divider */}
-      <div className="h-px bg-linear-to-r from-border via-border/50 to-transparent" />
+      <div className="from-border via-border/50 h-px bg-linear-to-r to-transparent" />
 
       {/* Content */}
-      <article>
-        <p className="text-[15px] leading-relaxed text-foreground/80 whitespace-pre-wrap">
-          {journal?.content}
-        </p>
-      </article>
+      <RenderedRichText savedJson={JSON.stringify(journal?.content)} />
     </div>
   );
 };

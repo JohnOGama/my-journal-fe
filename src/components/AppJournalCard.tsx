@@ -8,6 +8,7 @@ import ViewJournalDrawer from "./drawer/ViewJournalDrawer/ViewJournalDrawer";
 import { highlightText } from "@/helper/highlightText";
 import JournalCardSkeleton from "./skeleton/JournalCardSkeleton";
 import { useQueryStore } from "@/store/useQueryStore";
+import RenderedRichText from "./rich-text-editor/RenderedRichText";
 
 export const AppJournalCardList = () => {
   const { query, setQuery } = useQueryStore();
@@ -137,11 +138,10 @@ export const AppJournalCard = ({ journal }: { journal: Journal }) => {
           }}
           className="line-clamp-1 text-sm font-semibold"
         />
-        <p
-          dangerouslySetInnerHTML={{
-            __html: highlightText(journal.content, query.search),
-          }}
-          className="text-muted-foreground line-clamp-3 text-sm"
+
+        <RenderedRichText
+          savedJson={JSON.stringify(journal.content)}
+          className="line-clamp-3"
         />
         <div className="text-muted-foreground flex items-center justify-between text-xs">
           <div className="flex items-center gap-2">

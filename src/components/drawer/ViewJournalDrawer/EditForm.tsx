@@ -1,8 +1,19 @@
-import { Input, Label, Textarea } from "@/components/ui";
+import { Input, Label } from "@/components/ui";
 import { useFormContext } from "react-hook-form";
 import { EditJournalSchemaT } from "./ViewJournalDrawer";
 import AppSelect from "@/components/AppSelect";
 import { MOOD_OPTIONS } from "@/common/constants";
+import dynamic from "next/dynamic";
+const LazyRichTextEditor = dynamic(
+  () => import("@/components/rich-text-editor/RichTextEditor"),
+  {
+    loading({ isLoading }) {
+      if (isLoading) {
+        return <div>Loading...</div>;
+      }
+    },
+  },
+);
 
 const EditForm = () => {
   const form = useFormContext<EditJournalSchemaT>();
@@ -17,7 +28,7 @@ const EditForm = () => {
       <div className="space-y-2">
         <Label
           htmlFor="title"
-          className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground/70"
+          className="text-muted-foreground/70 text-[11px] font-semibold tracking-widest uppercase"
         >
           Title
         </Label>
@@ -34,7 +45,7 @@ const EditForm = () => {
       <div className="space-y-2">
         <Label
           htmlFor="mood"
-          className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground/70"
+          className="text-muted-foreground/70 text-[11px] font-semibold tracking-widest uppercase"
         >
           Mood
         </Label>
@@ -53,16 +64,15 @@ const EditForm = () => {
       <div className="space-y-2">
         <Label
           htmlFor="content"
-          className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground/70"
+          className="text-muted-foreground/70 text-[11px] font-semibold tracking-widest uppercase"
         >
           Journal Entry
         </Label>
-        <Textarea
-          id="content"
-          {...register("content")}
-          error={errors.content?.message}
-          placeholder="Write your thoughts..."
-          className="h-[180px] leading-relaxed placeholder:text-muted-foreground/50"
+        <LazyRichTextEditor
+          onChange={(value: string) => {
+            form.setValue("content", value);
+          }}
+          savedJson={JSON.stringify(form.getValues("content"))}
         />
       </div>
     </div>
