@@ -39,20 +39,21 @@ export interface ReleaseNoteData {
 }
 
 export const RELEASE_NOTES_DATA: ReleaseNoteData = {
-  version: "1.0.0",
+  version: "1.0.1",
   releaseDate: new Date().toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
     day: "numeric",
   }),
   overview:
-    "Welcome to My Journal 1.0.0! This is our initial release, bringing you a modern, feature-rich journaling experience with AI-powered insights, comprehensive analytics, and a beautiful, responsive interface. This release includes everything you need to start your digital journaling journey.",
+    "Welcome to My Journal 1.0.1! This is our initial release, bringing you a modern, feature-rich journaling experience with AI-powered insights, comprehensive analytics, and a beautiful, responsive interface. This release includes everything you need to start your digital journaling journey.",
   features: [
     {
       title: "Journal Management",
       icon: BookOpen,
       items: [
         "Create, read, update, and delete journal entries",
+        "Rich text editor for formatting journal entries",
         "Soft delete functionality for data recovery",
         "Mood tracking with 15 different mood options",
         "Automatic timestamp tracking for entries",
