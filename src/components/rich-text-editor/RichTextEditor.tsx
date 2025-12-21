@@ -23,7 +23,7 @@ export default function RichTextEditor({
         <Toolbar />
         <RichTextPlugin
           contentEditable={
-            <ContentEditable className="min-h-[200px] p-3 text-sm outline-none" />
+            <ContentEditable className="max-h-[200px] min-h-[200px] overflow-y-auto p-3 text-sm outline-none" />
           }
           placeholder={
             <div className="text-muted-foreground pointer-events-none absolute top-12 left-3 text-sm">
@@ -34,7 +34,7 @@ export default function RichTextEditor({
         />
       </div>
       <HistoryPlugin />
-      <SavePlugin onChange={onChange ?? (() => {})} />
+      <SavePlugin onChange={onChange} />
     </LexicalComposer>
   );
 }

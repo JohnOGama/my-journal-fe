@@ -70,7 +70,10 @@ const ReadOnlyForm = ({
       <div className="from-border via-border/50 h-px bg-linear-to-r to-transparent" />
 
       {/* Content */}
-      <RenderedRichText savedJson={JSON.stringify(journal?.content)} />
+      <RenderedRichText
+        className="max-h-[400px] overflow-y-auto"
+        savedJson={JSON.stringify(journal?.content)}
+      />
     </div>
   );
 };
