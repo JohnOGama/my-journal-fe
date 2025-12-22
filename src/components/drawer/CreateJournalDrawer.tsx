@@ -90,7 +90,6 @@ const CreateJournalDrawer = () => {
         />
         <LazyRichTextEditor
           onChange={(value: string) => {
-            console.log("value", value);
             form.setValue("content", value);
           }}
         />
